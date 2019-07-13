@@ -1,24 +1,45 @@
 <?php
 
+use Price\ShipmentPriceInterface;
+use Input\InputItem;
+use Math\Math;
 
 class OutputItem
 {
     private $date;
     private $packageSizeCode;
     private $carrierCode;
-    private $reducedShipmentPrice;
+
+    private $shipmentPriceWithDiscounts;
+    private $shipmentPriceWithoutDiscounts;
     private $shipmentDiscount;
 
     // @TODO: Dependency should be based on Interface, not Class
-    public function __construct(InputItem $input)
+    // @TODO: Package, Carrier may be developed as objects on their own
+    // @TODO: There may be Price object too.
+    // @TODO: ReducedPrice and ShipmentPrice may be objects extending from Price
+    // @TODO: Calculations may be performed within "attached" trait construction as well
+    public function __construct(InputItem $input, ShipmentPriceInterface $shipmentPrice)
     {
-        $this->setDate($input->getDate());
+        $this->setDate($input->getDateTime());
         $this->setPackageSizeCode($input->getPackageSizeCode());
+        $this->setCarrierCode($input->getCarrierCode());
 
-        // @TODO: Implement calculations and valua passing to the methods bellow
-        $this->setCarrierCode('');
-        $this->setReducedShipmentPrice(0.00);
-        $this->setShipmentDiscount(0.00);
+        $this->setShipmentPriceWithoutDiscounts(
+            $shipmentPrice->getShipmentPrice(
+                $input->getCarrierCode(),
+                $input->getPackageSizeCode()
+            )
+        );
+        $this->setShipmentPriceWithDiscount(
+            $shipmentPrice->getShipmentPriceWithDiscounts(
+                $this->getShipmentPriceWithoutDiscounts(),
+                $input
+            )
+        );
+        $this->setShipmentDiscount(Math::aMinusB(
+            $this->getShipmentPriceWithoutDiscounts(), $this->getShipmentPriceWithDiscounts()
+        ));
     }
 
     public function getDate(): DateTime
@@ -52,14 +73,14 @@ class OutputItem
     }
 
     // @TODO: Consider using more precise value carrier than float e.g. Math objects.
-    public function getReducedShipmentPrice(): float
+    public function getShipmentPriceWithDiscounts(): float
     {
-        return $this->reducedShipmentPrice;
+        return $this->shipmentPriceWithDiscounts;
     }
 
-    private function setReducedShipmentPrice(float $reducedShipmentPrice): void
+    private function setShipmentPriceWithDiscount(float $shipmentPriceWithDiscount): void
     {
-        $this->reducedShipmentPrice = $reducedShipmentPrice;
+        $this->shipmentPriceWithDiscounts = $shipmentPriceWithDiscount;
     }
 
     public function getShipmentDiscount(): float
@@ -70,5 +91,15 @@ class OutputItem
     private function setShipmentDiscount(float $shipmentDiscount): void
     {
         $this->shipmentDiscount = $shipmentDiscount;
+    }
+
+    private function setShipmentPriceWithoutDiscounts(float $shipmentPriceWithoutDiscounts): void
+    {
+        $this->shipmentPriceWithoutDiscounts = $shipmentPriceWithoutDiscounts;
+    }
+
+    public function getShipmentPriceWithoutDiscounts(): float
+    {
+        return $this->shipmentPriceWithoutDiscounts;
     }
 }

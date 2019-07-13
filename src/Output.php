@@ -8,12 +8,12 @@ class Output
     {
         // @TODO: check all the formats, especially float ones, separators, spaces, etc.
         echo sprintf(
-            "%s %s %s %s %s %s\n",
+            "%s %s %s %.2f %.2f %.2f\n",
             $item->getDate()->format('Y-m-d'),
             $item->getPackageSizeCode(),
             $item->getCarrierCode(),
-            $item->getCarrierCode(),
-            $item->getReducedShipmentPrice(),
+            $item->getShipmentPriceWithoutDiscounts(),
+            $item->getShipmentPriceWithDiscounts(),
             $item->getShipmentDiscount()
         );
     }
