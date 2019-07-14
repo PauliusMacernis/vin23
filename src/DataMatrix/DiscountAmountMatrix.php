@@ -39,7 +39,6 @@ class DiscountAmountMatrix
         $this->matrix = [];
     }
 
-    // @TODO: Test if adding the new month resets the count of the month, eg. if the last entry is of 2015-02, adding 2015-03 entry should set count to 0 on 2015-03
     public function countDiscountsOfDiscountSetContainerDiscountSetInMonth(DiscountSetContainerInterface $discountSetContainer, DiscountSetInterface $discountSet, DateTime $month): float
     {
         $indexYear = $month->format('Y');

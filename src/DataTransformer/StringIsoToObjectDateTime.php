@@ -20,7 +20,7 @@ class StringIsoToObjectDateTime
         }
     }
 
-    private function validateDateOrThrowException($date): void
+    private function validateDateOrThrowException(string $date): void
     {
         $this->validateDateSeparatorsOrThrowException($date);
 
@@ -30,9 +30,6 @@ class StringIsoToObjectDateTime
         $this->validateDateDayMinMaxOrThrowException($dateAsArray[2]);
     }
 
-    /**
-     * @param $date
-     */
     private function validateDateSeparatorsOrThrowException(string $date): void
     {
         $dashSeparatedDataEntityGroupsExpected = 3;

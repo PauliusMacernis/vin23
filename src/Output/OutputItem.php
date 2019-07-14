@@ -22,8 +22,6 @@ class OutputItem
 
     private $transactionsCountMatrix;
 
-    // @TODO: Dependency should be based on Interface, not Class
-    // @TODO: Package, Carrier may be developed as objects on their own
     public function __construct(DateTime $itemDateTime, string $packageSizeCode, string $carrierCode, PriceInterface $shipmentPrice, DiscountSetContainerInterface $discountSetContainer, DiscountAmountMatrix $discountAmountMatrix, TransactionsCountMatrix $transactionsCountMatrix)
     {
         $this->setTransactionsCountMatrix($transactionsCountMatrix);

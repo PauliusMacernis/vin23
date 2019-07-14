@@ -5,13 +5,10 @@ namespace Output;
 
 use Math\Math;
 
-// @TODO: This may be used via interface+abstract class so structures like OutputCli, OutputFile, others may be attached.
-// @TODO: More advanced templating may be introduced here as well later on.
 class OutputManager
 {
     public function outputLine(OutputItem $item): void
     {
-        // @TODO: check all the formats, especially float ones, separators, spaces, etc.
         echo sprintf(
             "%s %s %s %s %s\n",
             $item->getDateTime()->format('Y-m-d'),

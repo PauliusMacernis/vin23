@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace Carrier;
 
-// @TODO: Use instance of this object in the input object instead of the string (code). Same with Package object/string.
 class CarrierFrance
 {
     public const ITEMS = [

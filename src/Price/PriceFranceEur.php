@@ -8,8 +8,6 @@ namespace Price;
  */
 class PriceFranceEur extends Price
 {
-    // @TODO: DB + ORM + Repository pattern + Separate objects for carrier, package
-    // @TODO: Connect this with Carrier and Package objects information
     protected const PRICE_TABLE_EUR = [
         'LP' => [
             'S' => 1.50,
