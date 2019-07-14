@@ -4,12 +4,13 @@ declare(strict_types = 1);
 namespace DataTransformer;
 
 use DateTime;
+use DateTimeInterface;
 use Exception\IgnorableItemException;
 use Throwable;
 
 class StringIsoToObjectDateTime
 {
-    public function transformIsoDateToDateTimeObject(string $date): DateTime
+    public function transformIsoDateToDateTimeObject(string $date): DateTimeInterface
     {
         $this->validateDateOrThrowException($date);
 

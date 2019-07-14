@@ -3,13 +3,13 @@ declare(strict_types = 1);
 
 namespace DataMatrix;
 
-use DateTime;
+use DateTimeInterface;
 
 class TransactionsCountMatrix
 {
     private $matrix;
 
-    public function addValue(DateTime $dateTime, string $carrierCode, string $packageSizeCode, int $lineNumber): void
+    public function addValue(DateTimeInterface $dateTime, string $carrierCode, string $packageSizeCode, int $lineNumber): void
     {
         $indexYear = $dateTime->format('Y');
         $indexMonth = $dateTime->format('m');
@@ -30,7 +30,7 @@ class TransactionsCountMatrix
         $this->matrix = [];
     }
 
-    public function countItemsOfSizeOfCarrierInMonth(string $packageSizeCode, string $carrierCode, DateTime $month): int
+    public function countItemsOfSizeOfCarrierInMonth(string $packageSizeCode, string $carrierCode, DateTimeInterface $month): int
     {
         $indexYear = $month->format('Y');
         $indexMonth = $month->format('m');

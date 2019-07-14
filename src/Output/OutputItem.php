@@ -5,7 +5,7 @@ namespace Output;
 
 use DataMatrix\DiscountAmountMatrix;
 use DataMatrix\TransactionsCountMatrix;
-use DateTime;
+use DateTimeInterface;
 use DiscountSetContainer\DiscountSetContainerInterface;
 use Math\Math;
 use Price\PriceInterface;
@@ -22,7 +22,7 @@ class OutputItem
 
     private $transactionsCountMatrix;
 
-    public function __construct(DateTime $itemDateTime, string $packageSizeCode, string $carrierCode, PriceInterface $shipmentPrice, DiscountSetContainerInterface $discountSetContainer, DiscountAmountMatrix $discountAmountMatrix, TransactionsCountMatrix $transactionsCountMatrix)
+    public function __construct(DateTimeInterface $itemDateTime, string $packageSizeCode, string $carrierCode, PriceInterface $shipmentPrice, DiscountSetContainerInterface $discountSetContainer, DiscountAmountMatrix $discountAmountMatrix, TransactionsCountMatrix $transactionsCountMatrix)
     {
         $this->setTransactionsCountMatrix($transactionsCountMatrix);
 
@@ -44,12 +44,12 @@ class OutputItem
         ));
     }
 
-    public function getDateTime(): DateTime
+    public function getDateTime(): DateTimeInterface
     {
         return $this->dateTime;
     }
 
-    private function setDateTime(DateTime $dateTime): void
+    private function setDateTime(DateTimeInterface $dateTime): void
     {
         $this->dateTime = $dateTime;
     }

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace DataMatrix;
 
-use DateTime;
+use DateTimeInterface;
 use Discount\DiscountInterface;
 use DiscountSet\DiscountSetInterface;
 use DiscountSetContainer\DiscountSetContainerInterface;
@@ -13,7 +13,7 @@ class DiscountAmountMatrix
 {
     private $matrix;
 
-    public function addValue(DateTime $dateTime, DiscountSetContainerInterface $discountSetContainer, DiscountSetInterface $discountSet, DiscountInterface $discountItem, float $amount): void
+    public function addValue(DateTimeInterface $dateTime, DiscountSetContainerInterface $discountSetContainer, DiscountSetInterface $discountSet, DiscountInterface $discountItem, float $amount): void
     {
         $indexYear = $dateTime->format('Y');
         $indexMonth = $dateTime->format('m');
@@ -39,7 +39,7 @@ class DiscountAmountMatrix
         $this->matrix = [];
     }
 
-    public function countDiscountsOfDiscountSetContainerDiscountSetInMonth(DiscountSetContainerInterface $discountSetContainer, DiscountSetInterface $discountSet, DateTime $month): float
+    public function countDiscountsOfDiscountSetContainerDiscountSetInMonth(DiscountSetContainerInterface $discountSetContainer, DiscountSetInterface $discountSet, DateTimeInterface $month): float
     {
         $indexYear = $month->format('Y');
         $indexMonth = $month->format('m');

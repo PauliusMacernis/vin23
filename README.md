@@ -14,7 +14,7 @@
 ## Leftovers, improvements left for the future
 - Some methods have way too much parameters (3+) in their description, it would be better to pack-group them into objects and pass it as one.
 - Some methods have arrays coming in as arguments. Using collection object may be a bit more type-safe in some of cases.
-- Some methods have class name as type hint (e.g. DateTime), consider using interfaces instead. I have tried to minimize most of the objects usage but some are still left.
+- Some methods have class name as type hint (e.g. TransactionsCountMatrix), consider using interfaces instead. I have tried to minimize most of the objects usage but some are still left.
 - Avoid using "new ClassName" type of construct inside classes, it may be better to: 1. pass such objects already created, or 2. create these objects in constructor, or 3. use factory got from 1 or 2.
 - More advanced templating solution may be introduced in the place the output to CLI is being done.
 - Repository patterns may be used to deal with data currently stored in arrays (prices, carriers, packages), DB and ORM may be under considerations as well if expanding the solution, taking data from remote, etc.
