@@ -20,7 +20,7 @@ class StringIsoToObjectDateTime
         }
     }
 
-    private function validateDateOrThrowException($date): DateTime
+    private function validateDateOrThrowException($date): void
     {
         $this->validateDateSeparatorsOrThrowException($date);
 
