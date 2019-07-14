@@ -14,7 +14,7 @@ class OutputManager
         // @TODO: check all the formats, especially float ones, separators, spaces, etc.
         echo sprintf(
             "%s %s %s %s %s\n",
-            $item->getDate()->format('Y-m-d'),
+            $item->getDateTime()->format('Y-m-d'),
             $item->getPackageSizeCode(),
             $item->getCarrierCode(),
             $this->formatNumber($item->getShipmentPriceWithDiscounts()),

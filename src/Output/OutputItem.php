@@ -4,17 +4,15 @@ declare(strict_types = 1);
 namespace Output;
 
 use DataMatrix\DiscountAmountMatrix;
+use DataMatrix\TransactionsCountMatrix;
+use DateTime;
 use DiscountSetContainer\DiscountSetContainerInterface;
-use Input\InputItem;
 use Math\Math;
 use Price\PriceInterface;
-use DateTime;
 
 class OutputItem
 {
-    private $inputItem;
-
-    private $date;
+    private $dateTime;
     private $packageSizeCode;
     private $carrierCode;
 
@@ -22,30 +20,28 @@ class OutputItem
     private $shipmentPriceWithoutDiscounts;
     private $shipmentDiscount;
 
+    private $transactionsCountMatrix;
+
     // @TODO: Dependency should be based on Interface, not Class
     // @TODO: Package, Carrier may be developed as objects on their own
     // @TODO: There may be Price object too.
     // @TODO: ReducedPrice and ShipmentPrice may be objects extending from Price
     // @TODO: Calculations may be performed within "attached" trait construction as well
-    public function __construct(InputItem $input, PriceInterface $shipmentPrice, DiscountSetContainerInterface $discountSetContainer, DiscountAmountMatrix $discountAmountMatrix)
+    public function __construct(DateTime $itemDateTime, string $packageSizeCode, string $carrierCode, PriceInterface $shipmentPrice, DiscountSetContainerInterface $discountSetContainer, DiscountAmountMatrix $discountAmountMatrix, TransactionsCountMatrix $transactionsCountMatrix)
     {
-        $this->setInputItem($input);
-        $this->setDate($input->getDateTime());
-        $this->setPackageSizeCode($input->getPackageSizeCode());
-        $this->setCarrierCode($input->getCarrierCode());
+        $this->setTransactionsCountMatrix($transactionsCountMatrix);
 
+        $this->setDateTime($itemDateTime);
+        $this->setPackageSizeCode($packageSizeCode);
+        $this->setCarrierCode($carrierCode);
         $this->setShipmentPriceWithoutDiscounts(
             $shipmentPrice->getShipmentPrice(
-                $input->getCarrierCode(),
-                $input->getPackageSizeCode()
+                $this->getCarrierCode(), $this->getPackageSizeCode()
             )
         );
         $this->setShipmentPriceWithDiscount(
             $discountSetContainer->getPriceWithDiscountsApplied(
-                $shipmentPrice,
-                $this->getShipmentPriceWithoutDiscounts(),
-                $input,
-                $discountAmountMatrix
+                $shipmentPrice, $this->getShipmentPriceWithoutDiscounts(), $this, $discountAmountMatrix
             )
         );
         $this->setShipmentDiscount(Math::aMinusB(
@@ -53,14 +49,14 @@ class OutputItem
         ));
     }
 
-    public function getDate(): DateTime
+    public function getDateTime(): DateTime
     {
-        return $this->date;
+        return $this->dateTime;
     }
 
-    private function setDate(DateTime $date): void
+    private function setDateTime(DateTime $dateTime): void
     {
-        $this->date = $date;
+        $this->dateTime = $dateTime;
     }
 
     public function getPackageSizeCode(): string
@@ -114,13 +110,13 @@ class OutputItem
         return $this->shipmentPriceWithoutDiscounts;
     }
 
-    private function setInputItem(InputItem $inputItem): void
+    public function getTransactionsCountMatrix(): TransactionsCountMatrix
     {
-        $this->inputItem = $inputItem;
+        return $this->transactionsCountMatrix;
     }
 
-    public function getInputItem(): InputItem
+    private function setTransactionsCountMatrix(TransactionsCountMatrix $transactionsCountMatrix): void
     {
-        return $this->inputItem;
+        $this->transactionsCountMatrix = $transactionsCountMatrix;
     }
 }

@@ -6,8 +6,8 @@ namespace Discount;
 use DataMatrix\DiscountAmountMatrix;
 use DiscountSet\DiscountSetInterface;
 use DiscountSetContainer\DiscountSetContainerInterface;
-use Input\InputItem;
 use Math\Math;
+use Output\OutputItem;
 use Price\PriceInterface;
 
 /**
@@ -22,12 +22,12 @@ final class AccumulatedDiscountsCannotExceedTenEuroPerCalendarMonth implements D
         PriceInterface $shipmentPriceService,
         DiscountSetContainerInterface $discountSetContainerService,
         DiscountSetInterface $discountSetService,
-        InputItem $inputItem,
+        OutputItem $outputItem,
         float $priceBeforeAnyDiscountsOnItem,
         float $priceAfterDiscountsAppliedOnDiscountSetPastItems
     ): float
     {
-        $accumulatedDiscountInMonth = $discountAmountMatrix->countDiscountsOfDiscountSetContainerDiscountSetInMonth($discountSetContainerService, $discountSetService, $inputItem->getDateTime());
+        $accumulatedDiscountInMonth = $discountAmountMatrix->countDiscountsOfDiscountSetContainerDiscountSetInMonth($discountSetContainerService, $discountSetService, $outputItem->getDateTime());
 
         if (Math::isAEqualOrLessThanB($accumulatedDiscountInMonth, self::MAX_PER_CALENDAR_MONTH)) {
             return $priceAfterDiscountsAppliedOnDiscountSetPastItems; // All is under the limit, ok

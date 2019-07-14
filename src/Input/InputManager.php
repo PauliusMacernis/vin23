@@ -116,17 +116,14 @@ final class InputManager
 
         $this->transactionsCountMatrix->addValue($inputItemDateTime, $carrierCode, $packageSizeCode, $this->getLineNumber());
 
-        return new OutputItem(new InputItem(
-                $this->getLineNumber(),
-                $input,
-                $this->transactionsCountMatrix,
-                $inputItemDateTime,
-                $packageSizeCode,
-                $carrierCode
-            ),
+        return new OutputItem(
+            $inputItemDateTime,
+            $packageSizeCode,
+            $carrierCode,
             $shipmentPriceService,
             $discountSetContainer,
-            $discountAmountMatrix
+            $discountAmountMatrix,
+            $this->transactionsCountMatrix
         );
     }
 }

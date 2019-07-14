@@ -7,8 +7,8 @@ use Carrier\CarrierFrance;
 use DataMatrix\DiscountAmountMatrix;
 use DiscountSet\DiscountSetInterface;
 use DiscountSetContainer\DiscountSetContainerInterface;
-use Input\InputItem;
 use Math\Math;
+use Output\OutputItem;
 use Package\Package;
 use Price\PriceInterface;
 
@@ -24,23 +24,23 @@ final class ThirdLShipmentViaLpShouldBeFreeButOnlyOnceACalendarMonth implements 
         PriceInterface $shipmentPriceService,
         DiscountSetContainerInterface $discountSetContainerService,
         DiscountSetInterface $discountSetService,
-        InputItem $inputItem,
+        OutputItem $outputItem,
         float $priceBeforeAnyDiscountsOnItem,
         float $priceAfterDiscountsAppliedOnDiscountSetPastItems
     ): float
     {
-        if ($inputItem->getPackageSizeCode() !== Package::ITEMS['L']['code']) {
+        if ($outputItem->getPackageSizeCode() !== Package::ITEMS['L']['code']) {
             return $priceAfterDiscountsAppliedOnDiscountSetPastItems;
         }
 
-        if ($inputItem->getCarrierCode() !== CarrierFrance::ITEMS['LP']['code']) {
+        if ($outputItem->getCarrierCode() !== CarrierFrance::ITEMS['LP']['code']) {
             return $priceAfterDiscountsAppliedOnDiscountSetPastItems;
         }
 
-        $lShipmentViaLpOnInputItemMonth = $inputItem->getTransactionsCountMatrix()->countItemsOfSizeOfCarrierInMonth(
-            $inputItem->getPackageSizeCode(),
-            $inputItem->getCarrierCode(),
-            $inputItem->getDateTime()
+        $lShipmentViaLpOnInputItemMonth = $outputItem->getTransactionsCountMatrix()->countItemsOfSizeOfCarrierInMonth(
+            $outputItem->getPackageSizeCode(),
+            $outputItem->getCarrierCode(),
+            $outputItem->getDateTime()
         );
 
         if ($lShipmentViaLpOnInputItemMonth !== self::FREE_ITEM_NUMBER_FOR_L_VIA_LP_IN_CALENDAR_MONTH) {

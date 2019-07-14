@@ -6,8 +6,8 @@ namespace DiscountSetContainer;
 use DataMatrix\DiscountAmountMatrix;
 use DiscountSet\DiscountSetByV;
 use DiscountSet\DiscountSetInterface;
-use Input\InputItem;
 use Math\Math;
+use Output\OutputItem;
 use Price\PriceInterface;
 use RuntimeException;
 
@@ -21,7 +21,7 @@ class DiscountSetContainerFrance implements DiscountSetContainerInterface
         DiscountSetByV::class
     ];
 
-    public function getPriceWithDiscountsApplied(PriceInterface $shipmentPriceService, float $priceWithoutDiscount, InputItem $input, DiscountAmountMatrix $discountAmountMatrix): float
+    public function getPriceWithDiscountsApplied(PriceInterface $shipmentPriceService, float $priceWithoutDiscount, OutputItem $output, DiscountAmountMatrix $discountAmountMatrix): float
     {
         $priceAfterApplyingDiscountSets = Math::getNumber(0.0);
 
@@ -30,7 +30,7 @@ class DiscountSetContainerFrance implements DiscountSetContainerInterface
             $discountSetObject = new $discountSet();
             $this->validateDiscountSetOrThrowException($discountSetObject);
 
-            $priceAfterApplyingDiscountSet = $discountSetObject->getPriceWithDiscountsApplied($shipmentPriceService, $this, $priceWithoutDiscount, $input, $discountAmountMatrix);
+            $priceAfterApplyingDiscountSet = $discountSetObject->getPriceWithDiscountsApplied($shipmentPriceService, $this, $priceWithoutDiscount, $output, $discountAmountMatrix);
             $priceAfterApplyingDiscountSets = Math::aPlusB($priceAfterApplyingDiscountSets, $priceAfterApplyingDiscountSet);
         }
 

@@ -9,8 +9,8 @@ use Discount\AllSShipmentsAlwaysMatchLowestSPackagePriceAmongProviders;
 use Discount\DiscountInterface;
 use Discount\ThirdLShipmentViaLpShouldBeFreeButOnlyOnceACalendarMonth;
 use DiscountSetContainer\DiscountSetContainerInterface;
-use Input\InputItem;
 use Math\Math;
+use Output\OutputItem;
 use Price\PriceInterface;
 use RuntimeException;
 
@@ -18,16 +18,16 @@ class DiscountSetByV implements DiscountSetInterface
 {
     private $discountAmountMatrixAfterApplyDiscount;
 
-    public function getPriceWithDiscountsApplied(PriceInterface $shipmentPriceService, DiscountSetContainerInterface $discountSetContainerService, float $priceWithoutDiscount, InputItem $input, DiscountAmountMatrix $discountAmountMatrix): float
+    public function getPriceWithDiscountsApplied(PriceInterface $shipmentPriceService, DiscountSetContainerInterface $discountSetContainerService, float $priceWithoutDiscount, OutputItem $output, DiscountAmountMatrix $discountAmountMatrix): float
     {
         // Rule#1: All S shipments should always match the lowest S package price among the providers.
-        $price = $this->applyDiscount(AllSShipmentsAlwaysMatchLowestSPackagePriceAmongProviders::class, $discountAmountMatrix, $shipmentPriceService, $discountSetContainerService, $this, $priceWithoutDiscount, $priceWithoutDiscount, $input);
+        $price = $this->applyDiscount(AllSShipmentsAlwaysMatchLowestSPackagePriceAmongProviders::class, $discountAmountMatrix, $shipmentPriceService, $discountSetContainerService, $this, $priceWithoutDiscount, $priceWithoutDiscount, $output);
 
         // Rule#2: Third L shipment via LP should be free, but only once a calendar month.
-        $price = $this->applyDiscount(ThirdLShipmentViaLpShouldBeFreeButOnlyOnceACalendarMonth::class, $discountAmountMatrix, $shipmentPriceService, $discountSetContainerService, $this, $priceWithoutDiscount, $price, $input);
+        $price = $this->applyDiscount(ThirdLShipmentViaLpShouldBeFreeButOnlyOnceACalendarMonth::class, $discountAmountMatrix, $shipmentPriceService, $discountSetContainerService, $this, $priceWithoutDiscount, $price, $output);
 
         // Rule#3: Accumulated discounts cannot exceed 10 € in a calendar month. If there are not enough funds to fully cover a discount this calendar month, it should be covered partially.
-        $price = $this->applyDiscount(AccumulatedDiscountsCannotExceedTenEuroPerCalendarMonth::class, $discountAmountMatrix, $shipmentPriceService, $discountSetContainerService, $this, $priceWithoutDiscount, $price, $input);
+        $price = $this->applyDiscount(AccumulatedDiscountsCannotExceedTenEuroPerCalendarMonth::class, $discountAmountMatrix, $shipmentPriceService, $discountSetContainerService, $this, $priceWithoutDiscount, $price, $output);
 
         return $price;
     }
@@ -53,8 +53,8 @@ class DiscountSetByV implements DiscountSetInterface
         /** @var DiscountSetInterface          $thisDiscountSetService */
         /** @var float                         $priceBeforeAnyDiscountsOnItem */
         /** @var float                         $priceAfterDiscountsAppliedOnDiscountSetItems */
-        /** @var InputItem                     $input */
-        [$discountAmountMatrix, $shipmentPriceService, $discountSetContainerService, $thisDiscountSetService, $priceBeforeAnyDiscountsOnItem, $priceAfterDiscountsAppliedOnDiscountSetItems, $input] = $arguments;
+        /** @var OutputItem                    $outputItem */
+        [$discountAmountMatrix, $shipmentPriceService, $discountSetContainerService, $thisDiscountSetService, $priceBeforeAnyDiscountsOnItem, $priceAfterDiscountsAppliedOnDiscountSetItems, $outputItem] = $arguments;
 
         if (null === $this->discountAmountMatrixAfterApplyDiscount) { // First item analyzed, there was no any of "after apply discount" yet.
             $this->discountAmountMatrixAfterApplyDiscount = new DiscountAmountMatrix();
@@ -65,19 +65,19 @@ class DiscountSetByV implements DiscountSetInterface
             $shipmentPriceService,
             $discountSetContainerService,
             $thisDiscountSetService,
-            $input,
+            $outputItem,
             $priceBeforeAnyDiscountsOnItem,
             $priceAfterDiscountsAppliedOnDiscountSetItems
         );
 
-        $this->addToDiscountAccumulatedInDiscountSet($discountAmountMatrix, $input, $discountSetContainerService, $thisDiscountSetService, $discountObject, $priceAfterDiscountsAppliedOnDiscountSetItems, $priceAfterDiscountsAppliedOnDiscountSetItemsAndThisItem);
+        $this->addToDiscountAccumulatedInDiscountSet($discountAmountMatrix, $outputItem, $discountSetContainerService, $thisDiscountSetService, $discountObject, $priceAfterDiscountsAppliedOnDiscountSetItems, $priceAfterDiscountsAppliedOnDiscountSetItemsAndThisItem);
 
         return $priceAfterDiscountsAppliedOnDiscountSetItemsAndThisItem;
     }
 
-    private function addToDiscountAccumulatedInDiscountSet(DiscountAmountMatrix $discountAmountMatrix, InputItem $input, DiscountSetContainerInterface $discountSetContainerService, DiscountSetInterface $thisDiscountSetService, DiscountInterface $discountObject, float $priceAfterDiscountsAppliedOnDiscountSetItems, float $priceAfterDiscountsAppliedOnDiscountSetItemsAndThisItem): void
+    private function addToDiscountAccumulatedInDiscountSet(DiscountAmountMatrix $discountAmountMatrix, OutputItem $output, DiscountSetContainerInterface $discountSetContainerService, DiscountSetInterface $thisDiscountSetService, DiscountInterface $discountObject, float $priceAfterDiscountsAppliedOnDiscountSetItems, float $priceAfterDiscountsAppliedOnDiscountSetItemsAndThisItem): void
     {
-        $discountAmountMatrix->addValue($input->getDateTime(), $discountSetContainerService, $thisDiscountSetService, $discountObject, Math::aMinusB($priceAfterDiscountsAppliedOnDiscountSetItems, $priceAfterDiscountsAppliedOnDiscountSetItemsAndThisItem));
+        $discountAmountMatrix->addValue($output->getDateTime(), $discountSetContainerService, $thisDiscountSetService, $discountObject, Math::aMinusB($priceAfterDiscountsAppliedOnDiscountSetItems, $priceAfterDiscountsAppliedOnDiscountSetItemsAndThisItem));
         $this->discountAmountMatrixAfterApplyDiscount = $discountAmountMatrix;
     }
 }

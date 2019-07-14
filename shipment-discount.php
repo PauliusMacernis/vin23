@@ -6,10 +6,10 @@ include_once 'core/features/enableClassAutoload.php';
 
 use DataMatrix\DiscountAmountMatrix;
 use DiscountSetContainer\DiscountSetContainerFrance;
-use Input\InputManager;
-use Price\PriceFranceEur;
 use Exception\IgnorableItemException;
+use Input\InputManager;
 use Output\OutputManager;
+use Price\PriceFranceEur;
 
 $pathToInputFile = trim($argv[1]);
 $inputManager = new InputManager($pathToInputFile);
