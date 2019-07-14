@@ -1,6 +1,7 @@
 <?php
 
 use Math\Math;
+use Input\InputItem;
 
 // @TODO: This may be used via interface+abstract class so structures like OutputCli, OutputFile, others may be attached.
 // @TODO: Some templating may be introduced here as well probably.
@@ -18,6 +19,11 @@ class Output
             $item->getShipmentPriceWithDiscounts(),
             $this->getFormattedShipmentDiscount($item)
         );
+    }
+
+    public function outputLineIgnored(InputItem $inputItem): void
+    {
+        echo sprintf("%s Ignored\n", trim($inputItem->getOriginalItem()));
     }
 
     public function outputDone(): void

@@ -2,7 +2,7 @@
 
 namespace Price;
 
-use RuntimeException;
+use Exception\IgnorableItemException;
 
 final class PriceFranceEur implements PriceInterface
 {
@@ -25,14 +25,14 @@ final class PriceFranceEur implements PriceInterface
     {
         if (!isset(self::PRICE_TABLE_EUR[$carrierCode])) {
             // @TODO: Consider developing application-specific custom exception class extending from SPL exception
-            throw new RuntimeException(sprintf(
+            throw new IgnorableItemException(sprintf(
                 'There is no such carrier in France: %s',
                 $carrierCode
             ));
         }
 
         if (!isset(self::PRICE_TABLE_EUR[$carrierCode][$packageSizeCode])) {
-            throw new RuntimeException(sprintf(
+            throw new IgnorableItemException(sprintf(
                 'Carrier %s does not offer such package size carrying in France: %s',
                 $carrierCode,
                 $packageSizeCode

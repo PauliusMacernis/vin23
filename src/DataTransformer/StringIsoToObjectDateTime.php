@@ -3,7 +3,7 @@
 namespace DataTransformer;
 
 use DateTime;
-use RuntimeException;
+use Exception\IgnorableItemException;
 
 class StringIsoToObjectDateTime
 {
@@ -37,7 +37,7 @@ class StringIsoToObjectDateTime
         $dashSeparatedDataEntityGroupsExpected = 3;
         $dateAsArray = explode('-', $date);
         if (count($dateAsArray) !== $dashSeparatedDataEntityGroupsExpected) { // ISO format: YYYY-MM-DD
-            throw new RuntimeException(sprintf(
+            throw new IgnorableItemException(sprintf(
                 'Date is not of expected "YYYY-MM-DD" format. Should be %s, got %s. Date: %s',
                 $dashSeparatedDataEntityGroupsExpected,
                 count($dateAsArray),
@@ -51,11 +51,11 @@ class StringIsoToObjectDateTime
         if ((int)$year < 1) {
             // @TODO: use other types than %s for sprintf templates, e.g. integers may be of another type than %s.
             // @TODO: Most likely, all validation rules should be outputting the line number or line as string?
-            throw new RuntimeException(sprintf('Year value cannot be lower than 1. Got: %s', (int)$year));
+            throw new IgnorableItemException(sprintf('Year value cannot be lower than 1. Got: %s', (int)$year));
         }
 
         if ((int)$year > 9999) {
-            throw new RuntimeException(sprintf('Year value cannot be greater than 9999. Got: %s', (int)$year));
+            throw new IgnorableItemException(sprintf('Year value cannot be greater than 9999. Got: %s', (int)$year));
         }
 
     }

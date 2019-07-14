@@ -16,6 +16,7 @@ use DataMatrix\DiscountAmountMatrix;
 use DiscountSetContainer\DiscountSetContainerInFrance;
 use Input\Input;
 use Price\PriceFranceEur;
+use Exception\IgnorableItemException;
 
 // @TODO: Find a better way for the file path to get into Input constructor. It may be coming from CLI as an argument.
 $input = new Input('input.txt');
@@ -28,7 +29,14 @@ $discountSetContainer = new DiscountSetContainerInFrance();
 $discountAmountMatrix = new DiscountAmountMatrix();
 
 while ($line = $input->getNextTransactionLine()) {
-    $item = new OutputItem($line, $shipmentPriceService, $discountSetContainer, $discountAmountMatrix);
+    try {
+        $lineAsInputItem = $input->convertLineToObject($line);
+        $item = new OutputItem($lineAsInputItem, $shipmentPriceService, $discountSetContainer, $discountAmountMatrix);
+    } catch (IgnorableItemException $exception) {
+        $output->outputLineIgnored($lineAsInputItem);
+        continue;
+    }
+
     $output->outputLine($item);
 }
 

@@ -4,6 +4,7 @@ namespace Input;
 
 use DataMatrix\TransactionsCountMatrix;
 use DataTransformer\StringIsoToObjectDateTime;
+use Exception\IgnorableItemException;
 use RuntimeException;
 use SplFileObject;
 
@@ -34,7 +35,7 @@ final class Input
         $this->resetTransactionsCountMatrix();
     }
 
-    public function getNextTransactionLine(): ?InputItem
+    public function getNextTransactionLine(): ?string
     {
         $this->getFile()->next();
         $this->setLineNumber($this->getLineNumber() + 1);
@@ -43,27 +44,7 @@ final class Input
             return null;
         }
 
-        $input = $this->getFile()->current();
-        // @TODO: Regex may be better for cases with multiple space separator and so on but most likely a bit slower.
-        $inputArray = explode(' ', trim($input));
-        // @TODO: The value may be exported to the constant. I leave it here because column indexes (0,1,2) are here too.
-
-        $this->validateInputOrThrowException($inputArray, $input);
-
-        // @TODO: Create the new item via factory or something similar.
-        $inputItemDateTime = (new StringIsoToObjectDateTime())->transformIsoDateToDateTimeObject($inputArray[0]);
-        $packageSizeCode = $inputArray[1];
-        $carrierCode = $inputArray[2];
-
-        $this->transactionsCountMatrix->addValue($inputItemDateTime, $carrierCode, $packageSizeCode, $this->getLineNumber());
-
-        return new InputItem(
-            $this->getLineNumber(),
-            $this->transactionsCountMatrix,
-            $inputItemDateTime,
-            $packageSizeCode,
-            $carrierCode
-        );
+        return $this->getFile()->current();
     }
 
     /**
@@ -72,7 +53,7 @@ final class Input
     protected function validateInputOrThrowException(array $inputArray, string $input): void
     {
         if (count($inputArray) !== self::DATA_COLUMNS_EXPECTED_PER_LINE) {
-            throw new RuntimeException(sprintf(
+            throw new IgnorableItemException(sprintf(
                 'Input file data failure. Expected %s columns, got %s. Row: "%s"',
                 self::DATA_COLUMNS_EXPECTED_PER_LINE,
                 count($inputArray),
@@ -112,5 +93,31 @@ final class Input
     private function setTransactionsCountMatrix(TransactionsCountMatrix $transactionsCountMatrix): void
     {
         $this->transactionsCountMatrix = $transactionsCountMatrix;
+    }
+
+    public function convertLineToObject(string $input): InputItem
+    {
+
+        // @TODO: Regex may be better for cases with multiple space separator and so on but most likely a bit slower.
+        $inputArray = explode(' ', trim($input));
+        // @TODO: The value may be exported to the constant. I leave it here because column indexes (0,1,2) are here too.
+
+        $this->validateInputOrThrowException($inputArray, $input);
+
+        // @TODO: Create the new item via factory or something similar.
+        $inputItemDateTime = (new StringIsoToObjectDateTime())->transformIsoDateToDateTimeObject($inputArray[0]);
+        $packageSizeCode = $inputArray[1];
+        $carrierCode = $inputArray[2];
+
+        $this->transactionsCountMatrix->addValue($inputItemDateTime, $carrierCode, $packageSizeCode, $this->getLineNumber());
+
+        return new InputItem(
+            $this->getLineNumber(),
+            $input,
+            $this->transactionsCountMatrix,
+            $inputItemDateTime,
+            $packageSizeCode,
+            $carrierCode
+        );
     }
 }

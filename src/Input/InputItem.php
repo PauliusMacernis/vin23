@@ -18,6 +18,7 @@ class InputItem
 
     // @TODO: $itemNumber and $itemNumberThisMonth may be moved to separate trait (or alike construction/s) attached to related discount object
     private $itemNumber;
+    private $originalItem;
     private $transactionsCountMatrix;
 
     /**
@@ -26,13 +27,24 @@ class InputItem
      * @see https://www.php.net/manual/en/splfileobject.fgets.php
      * @TODO: Take care of the cases when $input comes as array or false
      */
-    public function __construct(int $itemNumber, TransactionsCountMatrix $transactionsCountMatrix, DateTime $itemDateTime, string $packageSizeCode, string $carrierCode)
+    public function __construct(int $itemNumber, string $originalItem, TransactionsCountMatrix $transactionsCountMatrix, DateTime $itemDateTime, string $packageSizeCode, string $carrierCode)
     {
         $this->setItemNumber($itemNumber);
+        $this->setOriginalItem($originalItem);
         $this->setTransactionsCountMatrix($transactionsCountMatrix);
         $this->setDateTime($itemDateTime);
         $this->setPackageSizeCode($packageSizeCode);
         $this->setCarrierCode($carrierCode);
+    }
+
+    public function getOriginalItem(): string
+    {
+        return $this->originalItem;
+    }
+
+    private function setOriginalItem(string $originalItem): void
+    {
+        $this->originalItem = $originalItem;
     }
 
     private function setDateTime(DateTime $date): void
