@@ -5,10 +5,10 @@ namespace DiscountSet;
 
 use DataMatrix\DiscountAmountMatrix;
 use DiscountSetContainer\DiscountSetContainerInterface;
-use Output\OutputItem;
+use Input\InputItem;
 use Price\PriceInterface;
 
 interface DiscountSetInterface
 {
-    public function getPriceWithDiscountsApplied(PriceInterface $shipmentPriceService, DiscountSetContainerInterface $discountSetContainerService, float $priceWithoutDiscount, OutputItem $output, DiscountAmountMatrix $discountAmountMatrix): float;
+    public function getPriceWithDiscountsApplied(PriceInterface $shipmentPriceService, DiscountSetContainerInterface $discountSetContainerService, float $priceWithoutDiscount, InputItem $output, DiscountAmountMatrix $discountAmountMatrix): float;
 }

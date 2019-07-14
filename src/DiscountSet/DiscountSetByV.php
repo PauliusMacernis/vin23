@@ -8,12 +8,12 @@ use Discount\AccumulatedDiscountsCannotExceedTenEuroPerCalendarMonth;
 use Discount\AllSShipmentsAlwaysMatchLowestSPackagePriceAmongProviders;
 use Discount\ThirdLShipmentViaLpShouldBeFreeButOnlyOnceACalendarMonth;
 use DiscountSetContainer\DiscountSetContainerInterface;
-use Output\OutputItem;
+use Input\InputItem;
 use Price\PriceInterface;
 
 class DiscountSetByV extends DiscountSet
 {
-    public function getPriceWithDiscountsApplied(PriceInterface $shipmentPriceService, DiscountSetContainerInterface $discountSetContainerService, float $priceWithoutDiscount, OutputItem $output, DiscountAmountMatrix $discountAmountMatrix): float
+    public function getPriceWithDiscountsApplied(PriceInterface $shipmentPriceService, DiscountSetContainerInterface $discountSetContainerService, float $priceWithoutDiscount, InputItem $output, DiscountAmountMatrix $discountAmountMatrix): float
     {
         // Rule#1: All S shipments should always match the lowest S package price among the providers.
         $price = $this->applyDiscount(AllSShipmentsAlwaysMatchLowestSPackagePriceAmongProviders::class, $discountAmountMatrix, $shipmentPriceService, $discountSetContainerService, $this, $priceWithoutDiscount, $priceWithoutDiscount, $output);

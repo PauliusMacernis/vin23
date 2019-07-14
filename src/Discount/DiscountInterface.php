@@ -6,7 +6,7 @@ namespace Discount;
 use DataMatrix\DiscountAmountMatrix;
 use DiscountSet\DiscountSetInterface;
 use DiscountSetContainer\DiscountSetContainerInterface;
-use Output\OutputItem;
+use Input\InputItem;
 use Price\PriceInterface;
 
 /**
@@ -19,7 +19,7 @@ interface DiscountInterface
         PriceInterface $shipmentPriceService,
         DiscountSetContainerInterface $discountSetContainerService,
         DiscountSetInterface $discountSetService,
-        OutputItem $outputItem,
+        InputItem $outputItem,
         float $priceBeforeAnyDiscountsOnItem,
         float $priceAfterDiscountsAppliedOnDiscountSetPastItems
     ): float;

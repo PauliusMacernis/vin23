@@ -3,11 +3,12 @@ declare(strict_types=1);
 
 namespace Output;
 
+use Input\InputItem;
 use Math\Math;
 
 class OutputManager
 {
-    public function outputLine(OutputItem $item): void
+    public function outputLine(InputItem $item): void
     {
         echo sprintf(
             "%s %s %s %s %s\n",
@@ -33,7 +34,7 @@ class OutputManager
         echo '';
     }
 
-    private function getFormattedShipmentDiscount(OutputItem $item): string
+    private function getFormattedShipmentDiscount(InputItem $item): string
     {
         $discount = $item->getShipmentDiscount();
         if (Math::isAEqualB($discount, 0.0)) {

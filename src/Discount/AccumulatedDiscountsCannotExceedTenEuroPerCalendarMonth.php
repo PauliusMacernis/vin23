@@ -6,8 +6,8 @@ namespace Discount;
 use DataMatrix\DiscountAmountMatrix;
 use DiscountSet\DiscountSetInterface;
 use DiscountSetContainer\DiscountSetContainerInterface;
+use Input\InputItem;
 use Math\Math;
-use Output\OutputItem;
 use Price\PriceInterface;
 
 /**
@@ -22,7 +22,7 @@ final class AccumulatedDiscountsCannotExceedTenEuroPerCalendarMonth implements D
         PriceInterface $shipmentPriceService,
         DiscountSetContainerInterface $discountSetContainerService,
         DiscountSetInterface $discountSetService,
-        OutputItem $outputItem,
+        InputItem $outputItem,
         float $priceBeforeAnyDiscountsOnItem,
         float $priceAfterDiscountsAppliedOnDiscountSetPastItems
     ): float

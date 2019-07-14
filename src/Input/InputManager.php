@@ -8,7 +8,6 @@ use DataMatrix\TransactionsCountMatrix;
 use DataTransformer\StringIsoToObjectDateTime;
 use DiscountSetContainer\DiscountSetContainerInterface;
 use Exception\IgnorableItemException;
-use Output\OutputItem;
 use Price\PriceInterface;
 use RuntimeException;
 use SplFileObject;
@@ -50,7 +49,7 @@ final class InputManager
         return $this->getFile()->current();
     }
 
-    public function convertTransactionLineToObject(string $input, PriceInterface $shipmentPriceService, DiscountSetContainerInterface $discountSetContainer, DiscountAmountMatrix $discountAmountMatrix): OutputItem
+    public function convertTransactionLineToObject(string $input, PriceInterface $shipmentPriceService, DiscountSetContainerInterface $discountSetContainer, DiscountAmountMatrix $discountAmountMatrix): InputItem
     {
         $inputArray = preg_split("/[\s]+/", $input, -1, PREG_SPLIT_NO_EMPTY);
         $this->validateInputOrThrowException($inputArray, $input);
@@ -60,7 +59,7 @@ final class InputManager
 
         $this->getTransactionsCountMatrix()->addValue($inputItemDateTime, $carrierCode, $packageSizeCode, $this->getLineNumber());
 
-        return new OutputItem(
+        return new InputItem(
             $inputItemDateTime,
             $packageSizeCode,
             $carrierCode,

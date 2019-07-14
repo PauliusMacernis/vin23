@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Output;
+namespace Input;
 
 use DataMatrix\DiscountAmountMatrix;
 use DataMatrix\TransactionsCountMatrix;
@@ -10,7 +10,7 @@ use DiscountSetContainer\DiscountSetContainerInterface;
 use Math\Math;
 use Price\PriceInterface;
 
-class OutputItem
+class InputItem
 {
     private $dateTime;
     private $packageSizeCode;

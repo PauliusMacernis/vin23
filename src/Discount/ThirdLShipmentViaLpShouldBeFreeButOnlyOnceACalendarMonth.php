@@ -7,8 +7,8 @@ use Carrier\CarrierFrance;
 use DataMatrix\DiscountAmountMatrix;
 use DiscountSet\DiscountSetInterface;
 use DiscountSetContainer\DiscountSetContainerInterface;
+use Input\InputItem;
 use Math\Math;
-use Output\OutputItem;
 use Package\Package;
 use Price\PriceInterface;
 
@@ -24,7 +24,7 @@ final class ThirdLShipmentViaLpShouldBeFreeButOnlyOnceACalendarMonth implements 
         PriceInterface $shipmentPriceService,
         DiscountSetContainerInterface $discountSetContainerService,
         DiscountSetInterface $discountSetService,
-        OutputItem $outputItem,
+        InputItem $outputItem,
         float $priceBeforeAnyDiscountsOnItem,
         float $priceAfterDiscountsAppliedOnDiscountSetPastItems
     ): float

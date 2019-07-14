@@ -6,8 +6,8 @@ namespace Discount;
 use DataMatrix\DiscountAmountMatrix;
 use DiscountSet\DiscountSetInterface;
 use DiscountSetContainer\DiscountSetContainerInterface;
+use Input\InputItem;
 use Math\Math;
-use Output\OutputItem;
 use Package\Package;
 use Price\PriceInterface;
 use RuntimeException;
@@ -22,7 +22,7 @@ class AllSShipmentsAlwaysMatchLowestSPackagePriceAmongProviders implements Disco
         PriceInterface $shipmentPriceService,
         DiscountSetContainerInterface $discountSetContainerService,
         DiscountSetInterface $discountSetService,
-        OutputItem $outputItem,
+        InputItem $outputItem,
         float $priceBeforeAnyDiscountsOnItem,
         float $priceAfterDiscountsAppliedOnDiscountSetPastItems
     ): float

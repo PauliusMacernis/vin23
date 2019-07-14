@@ -5,8 +5,8 @@ namespace DiscountSet;
 use DataMatrix\DiscountAmountMatrix;
 use Discount\DiscountInterface;
 use DiscountSetContainer\DiscountSetContainerInterface;
+use Input\InputItem;
 use Math\Math;
-use Output\OutputItem;
 use Price\PriceInterface;
 use RuntimeException;
 
@@ -34,7 +34,7 @@ abstract class DiscountSet implements DiscountSetInterface
         /** @var DiscountSetInterface          $thisDiscountSetService */
         /** @var float                         $priceBeforeAnyDiscountsOnItem */
         /** @var float                         $priceAfterDiscountsAppliedOnDiscountSetItems */
-        /** @var OutputItem                    $outputItem */
+        /** @var InputItem                    $outputItem */
         [$discountAmountMatrix, $shipmentPriceService, $discountSetContainerService, $thisDiscountSetService, $priceBeforeAnyDiscountsOnItem, $priceAfterDiscountsAppliedOnDiscountSetItems, $outputItem] = $arguments;
 
         if (null === $this->discountAmountMatrixAfterApplyDiscount) { // First item analyzed, there was no any of "after apply discount" yet.
@@ -56,7 +56,7 @@ abstract class DiscountSet implements DiscountSetInterface
         return $priceAfterDiscountsAppliedOnDiscountSetItemsAndThisItem;
     }
 
-    protected function addToDiscountAccumulatedInDiscountSet(DiscountAmountMatrix $discountAmountMatrix, OutputItem $output, DiscountSetContainerInterface $discountSetContainerService, DiscountSetInterface $thisDiscountSetService, DiscountInterface $discountObject, float $priceAfterDiscountsAppliedOnDiscountSetItems, float $priceAfterDiscountsAppliedOnDiscountSetItemsAndThisItem): void
+    protected function addToDiscountAccumulatedInDiscountSet(DiscountAmountMatrix $discountAmountMatrix, InputItem $output, DiscountSetContainerInterface $discountSetContainerService, DiscountSetInterface $thisDiscountSetService, DiscountInterface $discountObject, float $priceAfterDiscountsAppliedOnDiscountSetItems, float $priceAfterDiscountsAppliedOnDiscountSetItemsAndThisItem): void
     {
         $discountAmountMatrix->addValue($output->getDateTime(), $discountSetContainerService, $thisDiscountSetService, $discountObject, Math::aMinusB($priceAfterDiscountsAppliedOnDiscountSetItems, $priceAfterDiscountsAppliedOnDiscountSetItemsAndThisItem));
         $this->discountAmountMatrixAfterApplyDiscount = $discountAmountMatrix;
