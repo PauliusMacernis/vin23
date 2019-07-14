@@ -1,16 +1,7 @@
 <?php
 
-// @TODO: Should we tweak timezone settings anyhow for this project? I assume we use and trust server settings for now.
-// @TODO: Assuming input file is ordered by transaction date ASC
-
 define('APPLICATION_DECIMAL_PRECISION', 2);
-spl_autoload_register(static function (string $className) {
-    include sprintf(
-        'src%s%s.php',
-        DIRECTORY_SEPARATOR,
-        strtr($className, ['\\' => DIRECTORY_SEPARATOR])
-    );
-});
+include_once 'core/features/enableClassAutoload.php';
 
 use DataMatrix\DiscountAmountMatrix;
 use DiscountSetContainer\DiscountSetContainerInFrance;
@@ -18,8 +9,8 @@ use Input\Input;
 use Price\PriceFranceEur;
 use Exception\IgnorableItemException;
 
-// @TODO: Find a better way for the file path to get into Input constructor. It may be coming from CLI as an argument.
-$input = new Input('input.txt');
+
+$input = new Input(trim($argv[1]));
 $output = new Output();
 
 $input->openTransactionFile();
