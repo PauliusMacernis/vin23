@@ -12,8 +12,10 @@ spl_autoload_register(static function (string $className) {
     );
 });
 
+use DataMatrix\DiscountAmountMatrix;
+use DiscountSetContainer\DiscountSetContainerInFrance;
 use Input\Input;
-use Price\ShipmentPriceFranceEur;
+use Price\PriceFranceEur;
 
 // @TODO: Find a better way for the file path to get into Input constructor. It may be coming from CLI as an argument.
 $input = new Input('input.txt');
@@ -21,8 +23,12 @@ $output = new Output();
 
 $input->openTransactionFile();
 
+$shipmentPriceService = new PriceFranceEur();
+$discountSetContainer = new DiscountSetContainerInFrance();
+$discountAmountMatrix = new DiscountAmountMatrix();
+
 while ($line = $input->getNextTransactionLine()) {
-    $item = new OutputItem($line, new ShipmentPriceFranceEur());
+    $item = new OutputItem($line, $shipmentPriceService, $discountSetContainer, $discountAmountMatrix);
     $output->outputLine($item);
 }
 

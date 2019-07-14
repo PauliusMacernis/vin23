@@ -3,23 +3,37 @@
 namespace Discount;
 
 use Carrier\CarrierFrance;
+use DataMatrix\DiscountAmountMatrix;
+use DiscountSet\DiscountSetInterface;
+use DiscountSetContainer\DiscountSetContainerInterface;
 use Input\InputItem;
+use Math\Math;
 use Package\Package;
-use Price\ShipmentPriceInterface;
+use Price\PriceInterface;
 
 /**
  * Rule#2: Third L shipment via LP should be free, but only once a calendar month.
  */
-class ThirdLShipmentViaLpShouldBeFreeButOnlyOnceACalendarMonth implements DiscountInterface
+final class ThirdLShipmentViaLpShouldBeFreeButOnlyOnceACalendarMonth implements DiscountInterface
 {
-    public function apply(ShipmentPriceInterface $shipmentPriceService, float $priceWithoutDiscount, InputItem $inputItem): float
+    private const FREE_ITEM_NUMBER_FOR_L_VIA_LP_IN_CALENDAR_MONTH = 3;
+
+    public function apply(
+        DiscountAmountMatrix $discountAmountMatrix,
+        PriceInterface $shipmentPriceService,
+        DiscountSetContainerInterface $discountSetContainerService,
+        DiscountSetInterface $discountSetService,
+        InputItem $inputItem,
+        float $priceBeforeAnyDiscountsOnItem,
+        float $priceAfterDiscountsAppliedOnDiscountSetPastItems
+    ): float
     {
         if ($inputItem->getPackageSizeCode() !== Package::ITEMS['L']['code']) {
-            return $priceWithoutDiscount;
+            return $priceAfterDiscountsAppliedOnDiscountSetPastItems;
         }
 
         if ($inputItem->getCarrierCode() !== CarrierFrance::ITEMS['LP']['code']) {
-            return $priceWithoutDiscount;
+            return $priceAfterDiscountsAppliedOnDiscountSetPastItems;
         }
 
         $lShipmentViaLpOnInputItemMonth = $inputItem->getTransactionsCountMatrix()->countItemsOfSizeOfCarrierInMonth(
@@ -28,10 +42,10 @@ class ThirdLShipmentViaLpShouldBeFreeButOnlyOnceACalendarMonth implements Discou
             $inputItem->getDateTime()
         );
 
-        if ($lShipmentViaLpOnInputItemMonth === 3) { // Yep, this is it! Apply the discount.
-            return round(0, APPLICATION_DECIMAL_PRECISION);
+        if ($lShipmentViaLpOnInputItemMonth !== self::FREE_ITEM_NUMBER_FOR_L_VIA_LP_IN_CALENDAR_MONTH) {
+            return $priceAfterDiscountsAppliedOnDiscountSetPastItems;
         }
 
-        return $priceWithoutDiscount;
+        return Math::getNumber(0.0); // Yep, this is it! Apply the discount.
     }
 }

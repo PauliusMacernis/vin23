@@ -14,8 +14,29 @@ class Math
         return round($a, APPLICATION_DECIMAL_PRECISION) < round($b, APPLICATION_DECIMAL_PRECISION);
     }
 
+    public static function isAEqualB(float $a, float $b): bool
+    {
+        return round($a, APPLICATION_DECIMAL_PRECISION) === round($b, APPLICATION_DECIMAL_PRECISION);
+    }
+
+    public static function isAEqualOrLessThanB(float $a, float $b): bool
+    {
+        return round($a, APPLICATION_DECIMAL_PRECISION) <= round($b, APPLICATION_DECIMAL_PRECISION);
+    }
+
     public static function aMinusB(float $a, float $b): float
     {
         return round($a, APPLICATION_DECIMAL_PRECISION) - round($b, APPLICATION_DECIMAL_PRECISION);
+    }
+
+    // @TODO: Any other place with adding the numbers? This way we may refactor that place with this method.
+    public static function aPlusB(float $a, float $b): float
+    {
+        return round($a, APPLICATION_DECIMAL_PRECISION) + round($b, APPLICATION_DECIMAL_PRECISION);
+    }
+
+    public static function getNumber(float $number): float
+    {
+        return round($number, APPLICATION_DECIMAL_PRECISION);
     }
 }

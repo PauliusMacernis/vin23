@@ -49,7 +49,7 @@ class InputItem
     private function setCarrierCode($carrierCode): void
     {
         // @TODO: carrier code validation
-        $this->carrierCode = (string) $carrierCode;
+        $this->carrierCode = (string)$carrierCode;
     }
 
     public function getDateTime(): DateTime
@@ -72,7 +72,7 @@ class InputItem
         $this->itemNumber = $itemNumber;
     }
 
-    private function setTransactionsCountMatrix(TransactionsCountMatrix $transactionsCountMatrix)
+    private function setTransactionsCountMatrix(TransactionsCountMatrix $transactionsCountMatrix): void
     {
         $this->transactionsCountMatrix = $transactionsCountMatrix;
     }

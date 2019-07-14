@@ -4,11 +4,10 @@ namespace Price;
 
 use RuntimeException;
 
-final class ShipmentPriceFranceEur implements ShipmentPriceInterface
+final class PriceFranceEur implements PriceInterface
 {
-    use ShipmentDiscountSetByV;
-
     // @TODO: DB + ORM + Repository pattern + Separate objects for carrier, package
+    // @TODO: Connect this with Carrier and Package objects information
     private const PRICE_TABLE_EUR = [
         'LP' => [
             'S' => 1.50,

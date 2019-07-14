@@ -1,8 +1,10 @@
 <?php
 
-use Price\ShipmentPriceInterface;
+use DataMatrix\DiscountAmountMatrix;
+use DiscountSetContainer\DiscountSetContainerInterface;
 use Input\InputItem;
 use Math\Math;
+use Price\PriceInterface;
 
 class OutputItem
 {
@@ -19,7 +21,7 @@ class OutputItem
     // @TODO: There may be Price object too.
     // @TODO: ReducedPrice and ShipmentPrice may be objects extending from Price
     // @TODO: Calculations may be performed within "attached" trait construction as well
-    public function __construct(InputItem $input, ShipmentPriceInterface $shipmentPrice)
+    public function __construct(InputItem $input, PriceInterface $shipmentPrice, DiscountSetContainerInterface $discountSetContainer, DiscountAmountMatrix $discountAmountMatrix)
     {
         $this->setDate($input->getDateTime());
         $this->setPackageSizeCode($input->getPackageSizeCode());
@@ -32,9 +34,11 @@ class OutputItem
             )
         );
         $this->setShipmentPriceWithDiscount(
-            $shipmentPrice->getShipmentPriceWithDiscounts(
+            $discountSetContainer->getPriceWithDiscountsApplied(
+                $shipmentPrice,
                 $this->getShipmentPriceWithoutDiscounts(),
-                $input
+                $input,
+                $discountAmountMatrix
             )
         );
         $this->setShipmentDiscount(Math::aMinusB(

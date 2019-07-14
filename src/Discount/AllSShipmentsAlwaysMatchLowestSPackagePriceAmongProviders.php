@@ -2,23 +2,33 @@
 
 namespace Discount;
 
+use DataMatrix\DiscountAmountMatrix;
+use DiscountSet\DiscountSetInterface;
+use DiscountSetContainer\DiscountSetContainerInterface;
 use Input\InputItem;
 use Math\Math;
 use Package\Package;
-use Price\ShipmentPriceInterface;
+use Price\PriceInterface;
 use RuntimeException;
-
 
 /**
  * Rule#1: All S shipments should always match the lowest S package price among the providers.
  */
 class AllSShipmentsAlwaysMatchLowestSPackagePriceAmongProviders implements DiscountInterface
 {
-    public function apply(ShipmentPriceInterface $shipmentPriceService, float $priceWithoutDiscount, InputItem $inputItem): float
+    public function apply(
+        DiscountAmountMatrix $discountAmountMatrix,
+        PriceInterface $shipmentPriceService,
+        DiscountSetContainerInterface $discountSetContainerService,
+        DiscountSetInterface $discountSetService,
+        InputItem $inputItem,
+        float $priceBeforeAnyDiscountsOnItem,
+        float $priceAfterDiscountsAppliedOnDiscountSetPastItems
+    ): float
     {
         // All packages, except S
         if ($inputItem->getPackageSizeCode() !== Package::ITEMS['S']['code']) {
-            return $priceWithoutDiscount;
+            return $priceAfterDiscountsAppliedOnDiscountSetPastItems;
         }
 
         // S packages
