@@ -12,7 +12,6 @@ abstract class Price implements PriceInterface
     public function getShipmentPrice(string $carrierCode, string $packageSizeCode): float
     {
         if (!isset(static::PRICE_TABLE_EUR[$carrierCode])) {
-            // @TODO: Consider developing application-specific custom exception class extending from SPL exception
             throw new IgnorableItemException(sprintf(
                 'There is no such carrier in France: %s',
                 $carrierCode

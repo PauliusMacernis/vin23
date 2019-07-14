@@ -5,29 +5,29 @@ namespace DataTransformer;
 
 use DateTime;
 use Exception\IgnorableItemException;
+use Throwable;
 
 class StringIsoToObjectDateTime
 {
     public function transformIsoDateToDateTimeObject(string $date): DateTime
     {
         $this->validateDateOrThrowException($date);
-        return new DateTime($date);
+
+        try {
+            return new DateTime($date);
+        } catch (Throwable $exception) {
+            throw new IgnorableItemException(sprintf('Given value is not suitable for DateTime object. Given: %s', $date));
+        }
     }
 
-    private function validateDateOrThrowException($date): void
+    private function validateDateOrThrowException($date): DateTime
     {
-        // @TODO: There may be completely different and possibly the better approach on validating the data, e.g. creating date object + try-catch
-
-        // @TODO: Improve data validation by adding more rules
         $this->validateDateSeparatorsOrThrowException($date);
 
-        // @TODO: DRY with explode on dash.
         $dateAsArray = explode('-', $date);
-        $this->validateDateYearOrThrowException($dateAsArray[0]);
-        $this->validateDateMonthOrThrowException($dateAsArray[1]);
-        $this->validateDateDayOrThrowException($dateAsArray[2]);
-
-        // @TODO: Do we need to check for dates AFTER the date of today (server time, timezone)?
+        $this->validateDateYearMinMaxOrThrowException($dateAsArray[0]);
+        $this->validateDateMonthMinMaxOrThrowException($dateAsArray[1]);
+        $this->validateDateDayMinMaxOrThrowException($dateAsArray[2]);
     }
 
     /**
@@ -47,27 +47,33 @@ class StringIsoToObjectDateTime
         }
     }
 
-    private function validateDateYearOrThrowException(string $year): void
+    private function validateDateYearMinMaxOrThrowException(string $year): void
     {
-        if ((int)$year < 1) {
-            // @TODO: use other types than %s for sprintf templates, e.g. integers may be of another type than %s.
-            // @TODO: Most likely, all validation rules should be outputting the line number or line as string?
-            throw new IgnorableItemException(sprintf('Year value cannot be lower than 1. Got: %s', (int)$year));
+        if ((int) $year < 1) {
+            throw new IgnorableItemException(sprintf('Year value cannot be lower than 1. Got: %d', (int) $year));
         }
-
-        if ((int)$year > 9999) {
-            throw new IgnorableItemException(sprintf('Year value cannot be greater than 9999. Got: %s', (int)$year));
+        if ((int) $year > 9999) {
+            throw new IgnorableItemException(sprintf('Year value cannot be greater than 9999. Got: %d', (int) $year));
         }
-
     }
 
-    private function validateDateMonthOrThrowException(string $month): void
+    private function validateDateMonthMinMaxOrThrowException(string $month): void
     {
-        // @TODO: Implement validation
+        if ((int) $month < 1) {
+            throw new IgnorableItemException(sprintf('Month value cannot be lower than 1. Got: %d', (int) $month));
+        }
+        if ((int) $month > 12) {
+            throw new IgnorableItemException(sprintf('Month value cannot be greater than 12. Got: %d', (int) $month));
+        }
     }
 
-    private function validateDateDayOrThrowException($day): void
+    private function validateDateDayMinMaxOrThrowException(string $day): void
     {
-        // @TODO: Implement validation
+        if ((int) $day < 1) {
+            throw new IgnorableItemException(sprintf('Month value cannot be lower than 1. Got: %d', (int) $day));
+        }
+        if ((int) $day > 31) {
+            throw new IgnorableItemException(sprintf('Month value cannot be greater than 31. Got: %d', (int) $day));
+        }
     }
 }

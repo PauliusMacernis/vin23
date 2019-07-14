@@ -15,11 +15,14 @@ class TransactionsCountMatrix
         $indexMonth = $dateTime->format('m');
         $indexDay = $dateTime->format('d'); // This index is probably redundant
 
+        // Note: Matrix columns may be optimized (reduced) for better performance sacrificing details of the data
         if (!isset($this->matrix[$indexYear][$indexMonth][$indexDay][$carrierCode][$packageSizeCode][$lineNumber])) {
             $this->matrix[$indexYear][$indexMonth][$indexDay][$carrierCode][$packageSizeCode][$lineNumber] = 0;
+
+            return;
         }
 
-        $this->matrix[$indexYear][$indexMonth][$indexDay][$carrierCode][$packageSizeCode][$lineNumber]++; // =1 all the time
+        $this->matrix[$indexYear][$indexMonth][$indexDay][$carrierCode][$packageSizeCode][$lineNumber] = 1;
     }
 
     public function reset(): void

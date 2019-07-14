@@ -24,9 +24,6 @@ class OutputItem
 
     // @TODO: Dependency should be based on Interface, not Class
     // @TODO: Package, Carrier may be developed as objects on their own
-    // @TODO: There may be Price object too.
-    // @TODO: ReducedPrice and ShipmentPrice may be objects extending from Price
-    // @TODO: Calculations may be performed within "attached" trait construction as well
     public function __construct(DateTime $itemDateTime, string $packageSizeCode, string $carrierCode, PriceInterface $shipmentPrice, DiscountSetContainerInterface $discountSetContainer, DiscountAmountMatrix $discountAmountMatrix, TransactionsCountMatrix $transactionsCountMatrix)
     {
         $this->setTransactionsCountMatrix($transactionsCountMatrix);
@@ -79,7 +76,6 @@ class OutputItem
         $this->carrierCode = $carrierCode;
     }
 
-    // @TODO: Consider using more precise value carrier than float e.g. Math objects.
     public function getShipmentPriceWithDiscounts(): float
     {
         return $this->shipmentPriceWithDiscounts;

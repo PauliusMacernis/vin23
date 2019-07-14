@@ -6,7 +6,7 @@ namespace Output;
 use Math\Math;
 
 // @TODO: This may be used via interface+abstract class so structures like OutputCli, OutputFile, others may be attached.
-// @TODO: Some templating may be introduced here as well probably.
+// @TODO: More advanced templating may be introduced here as well later on.
 class OutputManager
 {
     public function outputLine(OutputItem $item): void
@@ -29,6 +29,7 @@ class OutputManager
 
     /**
      * This method marks the job being done to the end.
+     * It is "silenced" therefore looks like the redundant method for now. :(
      */
     public function outputDone(): void
     {

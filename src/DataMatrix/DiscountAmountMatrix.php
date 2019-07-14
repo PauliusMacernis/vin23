@@ -23,7 +23,7 @@ class DiscountAmountMatrix
         $discountSetClass = get_class($discountSet);
         $discountItemClass = get_class($discountItem);
 
-        // @TODO: Matrix columns may be optimized (reduced) for better performance sacrificing details of the data
+        // Note: Matrix columns may be optimized (reduced) for better performance sacrificing details of the data
         if (!isset($this->matrix[$indexYear][$indexMonth][$indexDay][$discountSetContainerClass][$discountSetClass][$discountItemClass])) {
             $this->matrix[$indexYear][$indexMonth][$indexDay][$discountSetContainerClass][$discountSetClass][$discountItemClass] = 0;
         }
