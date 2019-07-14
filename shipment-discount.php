@@ -9,10 +9,11 @@ use DiscountSetContainer\DiscountSetContainerFrance;
 use Input\InputManager;
 use Price\PriceFranceEur;
 use Exception\IgnorableItemException;
+use Output\OutputManager;
 
 $pathToInputFile = trim($argv[1]);
 $inputManager = new InputManager($pathToInputFile);
-$output = new Output();
+$outputManager = new OutputManager();
 
 $inputManager->openTransactionFile();
 
@@ -24,11 +25,11 @@ while ($lineAsString = $inputManager->getNextTransactionLine()) {
     try {
         $lineAsObject = $inputManager->convertTransactionLineToObject($lineAsString, $shipmentPriceService, $discountSetContainer, $discountAmountMatrix);
     } catch (IgnorableItemException $exception) {
-        $output->outputLineIgnored($lineAsString);
+        $outputManager->outputLineIgnored($lineAsString);
         continue;
     }
 
-    $output->outputLine($lineAsObject);
+    $outputManager->outputLine($lineAsObject);
 }
 
-$output->outputDone();
+$outputManager->outputDone();

@@ -70,12 +70,12 @@ class DiscountSetByV implements DiscountSetInterface
             $priceAfterDiscountsAppliedOnDiscountSetItems
         );
 
-        $this->addToDiscountAccumulatedInDiscountSet($discountAmountMatrix, $input, $discountSetContainerService, $thisDiscountSetService, $discountObject, $priceBeforeAnyDiscountsOnItem, $priceAfterDiscountsAppliedOnDiscountSetItems, $priceAfterDiscountsAppliedOnDiscountSetItemsAndThisItem);
+        $this->addToDiscountAccumulatedInDiscountSet($discountAmountMatrix, $input, $discountSetContainerService, $thisDiscountSetService, $discountObject, $priceAfterDiscountsAppliedOnDiscountSetItems, $priceAfterDiscountsAppliedOnDiscountSetItemsAndThisItem);
 
         return $priceAfterDiscountsAppliedOnDiscountSetItemsAndThisItem;
     }
 
-    private function addToDiscountAccumulatedInDiscountSet(DiscountAmountMatrix $discountAmountMatrix, InputItem $input, DiscountSetContainerInterface $discountSetContainerService, DiscountSetInterface $thisDiscountSetService, DiscountInterface $discountObject, float $priceBeforeAnyDiscountsOnItem, float $priceAfterDiscountsAppliedOnDiscountSetItems, float $priceAfterDiscountsAppliedOnDiscountSetItemsAndThisItem): void
+    private function addToDiscountAccumulatedInDiscountSet(DiscountAmountMatrix $discountAmountMatrix, InputItem $input, DiscountSetContainerInterface $discountSetContainerService, DiscountSetInterface $thisDiscountSetService, DiscountInterface $discountObject, float $priceAfterDiscountsAppliedOnDiscountSetItems, float $priceAfterDiscountsAppliedOnDiscountSetItemsAndThisItem): void
     {
         $discountAmountMatrix->addValue($input->getDateTime(), $discountSetContainerService, $thisDiscountSetService, $discountObject, Math::aMinusB($priceAfterDiscountsAppliedOnDiscountSetItems, $priceAfterDiscountsAppliedOnDiscountSetItemsAndThisItem));
         $this->discountAmountMatrixAfterApplyDiscount = $discountAmountMatrix;

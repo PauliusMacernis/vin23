@@ -33,10 +33,10 @@ final class AccumulatedDiscountsCannotExceedTenEuroPerCalendarMonth implements D
             return $priceAfterDiscountsAppliedOnDiscountSetPastItems; // All is under the limit, ok
         }
 
-        return $this->getTotalPriceWithDiscountsBackUpToMaxDiscountsLimit($accumulatedDiscountInMonth, $priceBeforeAnyDiscountsOnItem, $priceAfterDiscountsAppliedOnDiscountSetPastItems);
+        return $this->getTotalPriceWithDiscountsBackUpToMaxDiscountsLimit($accumulatedDiscountInMonth, $priceAfterDiscountsAppliedOnDiscountSetPastItems);
     }
 
-    private function getTotalPriceWithDiscountsBackUpToMaxDiscountsLimit(float $accumulatedDiscountInMonth, float $priceBeforeAnyDiscountsOnItem, float $priceAfterDiscountsAppliedOnDiscountSetPastItems): float
+    private function getTotalPriceWithDiscountsBackUpToMaxDiscountsLimit(float $accumulatedDiscountInMonth, float $priceAfterDiscountsAppliedOnDiscountSetPastItems): float
     {
         $overload = Math::aMinusB($accumulatedDiscountInMonth, self::MAX_PER_CALENDAR_MONTH);
         return Math::aPlusB($priceAfterDiscountsAppliedOnDiscountSetPastItems, $overload);

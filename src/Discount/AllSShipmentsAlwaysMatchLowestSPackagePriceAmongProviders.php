@@ -47,7 +47,7 @@ class AllSShipmentsAlwaysMatchLowestSPackagePriceAmongProviders implements Disco
             }
 
             if (null === $lowestPrice) {
-                $lowestPrice = $packages[Package::ITEMS['S']['code']];
+                $lowestPrice = (float) $packages[Package::ITEMS['S']['code']];
             }
 
             if (Math::isALessThanB($packages[Package::ITEMS['S']['code']], $lowestPrice)) {

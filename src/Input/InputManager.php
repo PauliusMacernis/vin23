@@ -8,7 +8,7 @@ use DataMatrix\TransactionsCountMatrix;
 use DataTransformer\StringIsoToObjectDateTime;
 use DiscountSetContainer\DiscountSetContainerInterface;
 use Exception\IgnorableItemException;
-use OutputItem;
+use Output\OutputItem;
 use Price\PriceInterface;
 use RuntimeException;
 use SplFileObject;

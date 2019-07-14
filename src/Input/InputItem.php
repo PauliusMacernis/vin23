@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace Input;
 
 // @TODO: global try-catch
-// @TODO: Use/create more specific exceptions to throw, not a general RunntimeException, - applies everywhere
+// @TODO: Use/create more specific exceptions to throw, not a general RuntimeException, - applies everywhere
 // @TODO: We may consider different validator class for all validate* methods.
 // @TODO: We may consider different validator class for all validateDate* methods.
 
@@ -22,12 +22,6 @@ class InputItem
     private $originalItem;
     private $transactionsCountMatrix;
 
-    /**
-     * InputItem constructor.
-     * @param array|false|string $input
-     * @see https://www.php.net/manual/en/splfileobject.fgets.php
-     * @TODO: Take care of the cases when $input comes as array or false
-     */
     public function __construct(int $itemNumber, string $originalItem, TransactionsCountMatrix $transactionsCountMatrix, DateTime $itemDateTime, string $packageSizeCode, string $carrierCode)
     {
         $this->setItemNumber($itemNumber);

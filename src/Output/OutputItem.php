@@ -1,11 +1,14 @@
 <?php
 declare(strict_types = 1);
 
+namespace Output;
+
 use DataMatrix\DiscountAmountMatrix;
 use DiscountSetContainer\DiscountSetContainerInterface;
 use Input\InputItem;
 use Math\Math;
 use Price\PriceInterface;
+use DateTime;
 
 class OutputItem
 {

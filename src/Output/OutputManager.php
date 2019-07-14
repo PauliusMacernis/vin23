@@ -1,23 +1,23 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
+
+namespace Output;
 
 use Math\Math;
-use Input\InputItem;
 
 // @TODO: This may be used via interface+abstract class so structures like OutputCli, OutputFile, others may be attached.
 // @TODO: Some templating may be introduced here as well probably.
-class Output
+class OutputManager
 {
     public function outputLine(OutputItem $item): void
     {
         // @TODO: check all the formats, especially float ones, separators, spaces, etc.
         echo sprintf(
-            "%s %s %s %.2f %.2f %s\n",
+            "%s %s %s %s %s\n",
             $item->getDate()->format('Y-m-d'),
             $item->getPackageSizeCode(),
             $item->getCarrierCode(),
-            $item->getShipmentPriceWithoutDiscounts(),
-            $item->getShipmentPriceWithDiscounts(),
+            $this->formatNumber($item->getShipmentPriceWithDiscounts()),
             $this->getFormattedShipmentDiscount($item)
         );
     }
@@ -35,10 +35,6 @@ class Output
         echo '';
     }
 
-    /**
-     * @param OutputItem $item
-     * @return float
-     */
     private function getFormattedShipmentDiscount(OutputItem $item): string
     {
         $discount = $item->getShipmentDiscount();
@@ -46,7 +42,11 @@ class Output
             return '-';
         }
 
-        // @TODO: Assuming the output of decimal and thousand separator symbols are based on server's locale settings.
-        return number_format($discount, APPLICATION_DECIMAL_PRECISION);
+        return $this->formatNumber($discount);
+    }
+
+    private function formatNumber(float $number): string
+    {
+        return number_format($number, APPLICATION_DECIMAL_PRECISION);
     }
 }

@@ -6,7 +6,6 @@ spl_autoload_register(static function (string $className) {
 
     if (!is_file($classFile)) {
         throw new RuntimeException(sprintf('Class "%s" is not found in "%s" therefore cannot be loaded.', $className, $classFile));
-        die();
     }
 
     include $classFile;
