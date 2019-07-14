@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 use DataMatrix\DiscountAmountMatrix;
 use DiscountSetContainer\DiscountSetContainerInterface;
@@ -8,6 +9,8 @@ use Price\PriceInterface;
 
 class OutputItem
 {
+    private $inputItem;
+
     private $date;
     private $packageSizeCode;
     private $carrierCode;
@@ -23,6 +26,7 @@ class OutputItem
     // @TODO: Calculations may be performed within "attached" trait construction as well
     public function __construct(InputItem $input, PriceInterface $shipmentPrice, DiscountSetContainerInterface $discountSetContainer, DiscountAmountMatrix $discountAmountMatrix)
     {
+        $this->setInputItem($input);
         $this->setDate($input->getDateTime());
         $this->setPackageSizeCode($input->getPackageSizeCode());
         $this->setCarrierCode($input->getCarrierCode());
@@ -105,5 +109,15 @@ class OutputItem
     public function getShipmentPriceWithoutDiscounts(): float
     {
         return $this->shipmentPriceWithoutDiscounts;
+    }
+
+    private function setInputItem(InputItem $inputItem): void
+    {
+        $this->inputItem = $inputItem;
+    }
+
+    public function getInputItem(): InputItem
+    {
+        return $this->inputItem;
     }
 }

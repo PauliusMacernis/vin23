@@ -1,14 +1,16 @@
 <?php
+declare(strict_types = 1);
 
 namespace Price;
 
-use Exception\IgnorableItemException;
-
-final class PriceFranceEur implements PriceInterface
+/**
+ * Deals with the information on carrier prices in France
+ */
+class PriceFranceEur extends Price
 {
     // @TODO: DB + ORM + Repository pattern + Separate objects for carrier, package
     // @TODO: Connect this with Carrier and Package objects information
-    private const PRICE_TABLE_EUR = [
+    protected const PRICE_TABLE_EUR = [
         'LP' => [
             'S' => 1.50,
             'M' => 4.90,
@@ -20,30 +22,4 @@ final class PriceFranceEur implements PriceInterface
             'L' => 4.00,
         ],
     ];
-
-    public function getShipmentPrice(string $carrierCode, string $packageSizeCode): float
-    {
-        if (!isset(self::PRICE_TABLE_EUR[$carrierCode])) {
-            // @TODO: Consider developing application-specific custom exception class extending from SPL exception
-            throw new IgnorableItemException(sprintf(
-                'There is no such carrier in France: %s',
-                $carrierCode
-            ));
-        }
-
-        if (!isset(self::PRICE_TABLE_EUR[$carrierCode][$packageSizeCode])) {
-            throw new IgnorableItemException(sprintf(
-                'Carrier %s does not offer such package size carrying in France: %s',
-                $carrierCode,
-                $packageSizeCode
-            ));
-        }
-
-        return self::PRICE_TABLE_EUR[$carrierCode][$packageSizeCode];
-    }
-
-    public function getAllPrices(): array
-    {
-        return self::PRICE_TABLE_EUR;
-    }
 }

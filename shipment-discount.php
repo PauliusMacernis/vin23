@@ -1,34 +1,34 @@
 <?php
+declare(strict_types = 1);
 
 define('APPLICATION_DECIMAL_PRECISION', 2);
 include_once 'core/features/enableClassAutoload.php';
 
 use DataMatrix\DiscountAmountMatrix;
-use DiscountSetContainer\DiscountSetContainerInFrance;
-use Input\Input;
+use DiscountSetContainer\DiscountSetContainerFrance;
+use Input\InputManager;
 use Price\PriceFranceEur;
 use Exception\IgnorableItemException;
 
-
-$input = new Input(trim($argv[1]));
+$pathToInputFile = trim($argv[1]);
+$inputManager = new InputManager($pathToInputFile);
 $output = new Output();
 
-$input->openTransactionFile();
+$inputManager->openTransactionFile();
 
 $shipmentPriceService = new PriceFranceEur();
-$discountSetContainer = new DiscountSetContainerInFrance();
+$discountSetContainer = new DiscountSetContainerFrance();
 $discountAmountMatrix = new DiscountAmountMatrix();
 
-while ($line = $input->getNextTransactionLine()) {
+while ($lineAsString = $inputManager->getNextTransactionLine()) {
     try {
-        $lineAsInputItem = $input->convertLineToObject($line);
-        $item = new OutputItem($lineAsInputItem, $shipmentPriceService, $discountSetContainer, $discountAmountMatrix);
+        $lineAsObject = $inputManager->convertTransactionLineToObject($lineAsString, $shipmentPriceService, $discountSetContainer, $discountAmountMatrix);
     } catch (IgnorableItemException $exception) {
-        $output->outputLineIgnored($lineAsInputItem);
+        $output->outputLineIgnored($lineAsString);
         continue;
     }
 
-    $output->outputLine($item);
+    $output->outputLine($lineAsObject);
 }
 
 $output->outputDone();

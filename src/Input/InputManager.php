@@ -1,16 +1,21 @@
 <?php
+declare(strict_types = 1);
 
 namespace Input;
 
+use DataMatrix\DiscountAmountMatrix;
 use DataMatrix\TransactionsCountMatrix;
 use DataTransformer\StringIsoToObjectDateTime;
+use DiscountSetContainer\DiscountSetContainerInterface;
 use Exception\IgnorableItemException;
+use OutputItem;
+use Price\PriceInterface;
 use RuntimeException;
 use SplFileObject;
 
 // @TODO: namespaces - we should probably need them all over here and there if we extend the application
 // @TODO: getters, setters in all classes.
-final class Input
+final class InputManager
 {
     private const DATA_COLUMNS_EXPECTED_PER_LINE = 3;
 
@@ -95,7 +100,7 @@ final class Input
         $this->transactionsCountMatrix = $transactionsCountMatrix;
     }
 
-    public function convertLineToObject(string $input): InputItem
+    public function convertTransactionLineToObject(string $input, PriceInterface $shipmentPriceService, DiscountSetContainerInterface $discountSetContainer, DiscountAmountMatrix $discountAmountMatrix): OutputItem
     {
 
         // @TODO: Regex may be better for cases with multiple space separator and so on but most likely a bit slower.
@@ -111,13 +116,17 @@ final class Input
 
         $this->transactionsCountMatrix->addValue($inputItemDateTime, $carrierCode, $packageSizeCode, $this->getLineNumber());
 
-        return new InputItem(
-            $this->getLineNumber(),
-            $input,
-            $this->transactionsCountMatrix,
-            $inputItemDateTime,
-            $packageSizeCode,
-            $carrierCode
+        return new OutputItem(new InputItem(
+                $this->getLineNumber(),
+                $input,
+                $this->transactionsCountMatrix,
+                $inputItemDateTime,
+                $packageSizeCode,
+                $carrierCode
+            ),
+            $shipmentPriceService,
+            $discountSetContainer,
+            $discountAmountMatrix
         );
     }
 }

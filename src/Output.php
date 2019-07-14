@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 use Math\Math;
 use Input\InputItem;
@@ -21,15 +22,17 @@ class Output
         );
     }
 
-    public function outputLineIgnored(InputItem $inputItem): void
+    public function outputLineIgnored($originalLine): void
     {
-        echo sprintf("%s Ignored\n", trim($inputItem->getOriginalItem()));
+        echo sprintf("%s Ignored\n", trim($originalLine));
     }
 
+    /**
+     * This method marks the job being done to the end.
+     */
     public function outputDone(): void
     {
-        // @TODO: This method marks the job being done. Most likely, it is redundant and we may remove it.
-        echo 'DONE.';
+        echo '';
     }
 
     /**

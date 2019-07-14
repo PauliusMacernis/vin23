@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 spl_autoload_register(static function (string $className) {
     $classFile = sprintf('src%s%s.php', DIRECTORY_SEPARATOR, strtr($className, ['\\' => DIRECTORY_SEPARATOR]));

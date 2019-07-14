@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace DiscountSetContainer;
 
@@ -10,7 +11,11 @@ use Math\Math;
 use Price\PriceInterface;
 use RuntimeException;
 
-class DiscountSetContainerInFrance implements DiscountSetContainerInterface
+/**
+ * Deals with sets of discounts polled together for any reason.
+ *
+ */
+class DiscountSetContainerFrance implements DiscountSetContainerInterface
 {
     private const DISCOUNT_SETS_APPLIED_IN_ORDER = [
         DiscountSetByV::class

@@ -1,5 +1,6 @@
 <?php
-// @TODO: stricttypes=1 header
+declare(strict_types = 1);
+
 namespace Price;
 
 interface PriceInterface
