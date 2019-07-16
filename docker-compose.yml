@@ -1,0 +1,7 @@
+version: "3"
+services:
+  fpm:
+    image: "php:7.2.19-fpm"
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html

@@ -1,21 +1,36 @@
-# Requirements
+# Running the script
+
+This script may be run in two ways:
+1. Inside the prepared Docker container
+2. Otherwise
+
+## Running the script: Inside the prepared Docker container
+This way of running requires Docker (e.g. v18.09.7) and docker-compose (e.g. v1.21.2) to be installed on your computer.  
+In order to boot up the project, run the following docker-compose commands inside the project directory:
+- `docker-compose up -d` - initialize Docker setup, pull php-fpm container
+- `docker-compose exec fpm php shipment-discount.php input.txt` - run the actual script
+- `docker-compose down --volumes` - shut down Docker setup
+
+## Running the script: Otherwise
+
+### Requirements
 * PHP: ^7.2.19
 * Ubuntu 18.04.2 LTS (another OS may be ok too, not tested yet)
 
-## Running the script
+### Running the script
 `php shipment-discount.php input.txt`
 
-## Running the tests
-**TBD**
 
-## Assumptions
+---
+
+# Assumptions
 - PHP server date and time is set correctly.
 - PHP server has valid timezone settings therefore time is always compatible with the time seen in input and output data.
 - PHP server has valid locale settings therefore server settings on decimal and thousand separators are ok for the output.
 - Transaction records are ordered by a transaction date in the input file - the oldest one is on the first line, the newest one is at the end.
 - Transaction records do not contain records from the future (also relates to the assumption on timezone settings mentioned above).
 
-## Known leftovers, improvements for the future
+# Known leftovers, improvements for the future
 - Some methods have way too much parameters (3+) in their description, it would be better to pack-group them into objects and pass it as fewer or one.
 - Some methods have arrays coming in as arguments. Using collection object may be a bit more type-safe in some of cases.
 - Some methods have class name as type hint (e.g. TransactionsCountMatrix), consider using interfaces instead. I have tried to minimize most of the objects usage but some are still left.
@@ -25,4 +40,7 @@
 - OutputManager may be refactored to it's own class (e.g. OutputCli), abstract class (e.g. Output), and interface so attaching other output engines (e.g. OutputFile) would become easier later on.
 - Use CarrierFrance object in the OutputItem object instead of the string (code). Same with Package object/string. This would eliminate codes from CLI input flying around in the code. Relates to DB and ORM layers.
 - Connect PriceFranceEur with Carrier and Package objects information. Again, relates to relational DB systems, ORM layer.
-- Docker containers environment to run the application in.
+- Tests
+
+# Running the tests
+**TBD**
